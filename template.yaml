@@ -1,0 +1,50 @@
+#
+#  Enrole Inc.
+#  Copyright (C) - 2020
+#
+#  File Name: template.yaml
+#  Description: Defines the root resources to create CF macros
+#  Creation Date: 7/31/2021
+#
+#  This file is owned by Enrole Inc.
+#
+#  Distribution and duplication of this source code outside of the organization
+#  is prohibited.
+#
+
+AWSTemplateFormatVersion: "2010-09-09"
+Transform: AWS::Serverless-2016-10-31
+Description: enrole - CloudFormation Macros
+
+Globals:
+  Function:
+    Timeout: 15
+    Runtime: nodejs14.x
+
+Resources:
+  #### StringUtils
+  ## Lowercase
+  StringUtilsLowercaseFunc:
+    Type: AWS::Serverless::Function
+    Properties:
+      FunctionName: !Join ["-", [!Ref AWS::StackName, "StringUtilsLowercaseFunc"]]
+      CodeUri: ./stringutils
+      Handler: lowercase.lowercase
+  StringUtilsLowercaseMacro:
+    Type: AWS::CloudFormation::Macro
+    Properties:
+      Name: StringUtilsLowercase
+      Description: Transforms string to lowercase
+      FunctionName: !GetAtt StringUtilsLowercaseFunc.Arn
+  StringUtilsUppercaseFunc:
+    Type: AWS::Serverless::Function
+    Properties:
+      FunctionName: !Join ["-", [!Ref AWS::StackName, "StringUtilsUppercaseFunc"]]
+      CodeUri: ./stringutils
+      Handler: uppercase.uppercase
+  StringUtilsUppercaseMacro:
+    Type: AWS::CloudFormation::Macro
+    Properties:
+      Name: StringUtilsUppercase
+      Description: Transforms string to uppercase
+      FunctionName: !GetAtt StringUtilsUppercaseFunc.Arn
